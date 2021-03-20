@@ -1,6 +1,8 @@
 # renpy-achievement
 Code for an Xbox-inspired achievement popup in Ren'Py
 
+![achievement_gif](https://github.com/shawna-p/renpy-achievement/blob/main/achievement_gif.gif?raw=true)
+
 ## How to use
 
 First, drop the file `achievement.rpy` into your `game/` folder, and add the images `circle.png`, `trophy.png`, and `star.png` to your `images/` folder. Then, to show the achievement popup in-game, just write:
