@@ -131,9 +131,23 @@ transform appear(delay=1.3):
     pause delay
     alpha 1.0
 
-# This just gets recoloured for the various coloured circles. If you have
-# your own circle image, you can redefine it instead to look like
-image white_circle = 'circle.png'
+init python:
+    class Circle(renpy.Displayable):
+        def __init__(self, color="#000", diameter=None, **kwargs):
+            super(Circle, self).__init__(**kwargs)
+            self.color = renpy.color.Color(color)
+            self.diameter = diameter or (2*circle_size)
+
+        def render(self, width, height, st, at):
+            diameter = self.diameter or min(width, height)
+            render = renpy.Render(diameter, diameter)
+            cv = render.canvas()
+            cv.circle(self.color, # the color
+                      (diameter/2, diameter/2), # the center
+                      diameter/2, # the radius
+                      )
+            return render
+
 # You can replace this with your own image of a trophy or some other icon.
 # This one begins as a star, then "rotates" to become the trophy icon.
 image trophy_icon:
@@ -142,6 +156,7 @@ image trophy_icon:
     squish_x
     'trophy.png'
     stretch_x
+
 # Transforms used by the trophy icon definition.
 transform squish_x():
     xzoom 1.0
@@ -149,15 +164,16 @@ transform squish_x():
 transform stretch_x():
     xzoom 0.0
     linear 0.5 xzoom 1.0
+
 # These images overlap and grow larger over each other to make up the trophy
-# effect. Requires the GL2 shaders to recolour the circles, but you can
-# also just replace the circles with regular images.
-define config.gl2 = True
-image green_circle = Transform('white_circle', matrixcolor=ColorizeMatrix("#000", "#080"))
-image dark_green_circle = Transform('white_circle', matrixcolor=ColorizeMatrix("#000", "#045a04"))
-image lime_circle = Transform('white_circle', matrixcolor=ColorizeMatrix("#000", "#0f0"))
+# effect. Uses the Circle displayable defined earlier.
+image green_circle = Circle(color="#080")
+image dark_green_circle = Circle(color="#045a04")
+image lime_circle = Circle(color="#0f0")
+
 # This is the image shown behind the trophy icon
 image trophy_bg = 'lime_circle'
+
 # This is the background for the entire achievement once the text slides out.
 # Should be variable-width, likely inside a Frame as seen here.
 image achievement_bg = Frame('green_circle', circle_size//2, circle_size//2)
