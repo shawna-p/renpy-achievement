@@ -92,7 +92,7 @@ screen achievement_unlock(description="Description", box_len=max_achievement_len
     timer 4.3+read_len action Hide('achievement_unlock')
 
 # Radius of the circle used for the unlock background
-define circle_size = 50
+define circle_size = 55
 # Default length the achievement should expand to in order to fit the text.
 # Can be adjusted via passing an argument to the screen.
 define max_achievement_len = 250
@@ -133,10 +133,10 @@ transform appear(delay=1.3):
 
 init python:
     class Circle(renpy.Displayable):
-        def __init__(self, color="#000", diameter=None, **kwargs):
+        def __init__(self, diameter, color="#000", **kwargs):
             super(Circle, self).__init__(**kwargs)
             self.color = renpy.color.Color(color)
-            self.diameter = diameter or (2*circle_size)
+            self.diameter = diameter
 
         def render(self, width, height, st, at):
             diameter = self.diameter or min(width, height)
@@ -167,9 +167,9 @@ transform stretch_x():
 
 # These images overlap and grow larger over each other to make up the trophy
 # effect. Uses the Circle displayable defined earlier.
-image green_circle = Circle(color="#080")
-image dark_green_circle = Circle(color="#045a04")
-image lime_circle = Circle(color="#0f0")
+image green_circle = Circle(circle_size, color="#080")
+image dark_green_circle = Circle(circle_size, color="#045a04")
+image lime_circle = Circle(circle_size, color="#0f0")
 
 # This is the image shown behind the trophy icon
 image trophy_bg = 'lime_circle'
